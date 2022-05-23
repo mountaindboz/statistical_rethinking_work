@@ -3,6 +3,7 @@
 
 library(tidyverse)
 library(patchwork)
+library(rethinking)
 
 
 # Question 1 --------------------------------------------------------------
@@ -115,6 +116,21 @@ plt_prior_2 + plt_post_2
 # had only the information in the interval, what might you misunderstand about
 # the shape of the posterior distribution?
 
+# Sample the posterior distribution from #2
+samp_globe_2 <- sample(df_globe_2$p_grid, size = 1e4, replace = TRUE, prob = df_globe_2$posterior)
+
+# Calculate the 89% percentile interval
+globe_2_PI_89 <- PI(samp_globe_2)
+globe_2_PI_89
+
+# Calculate the 89% HPDI interval
+globe_2_HPDI_89 <- HPDI(samp_globe_2)
+globe_2_HPDI_89
+
+# Which interval is wider?
+max(globe_2_PI_89) - min(globe_2_PI_89)
+max(globe_2_HPDI_89) - min(globe_2_HPDI_89)
+# The 89% percentile interval
 
 
 # Question 4 --------------------------------------------------------------
