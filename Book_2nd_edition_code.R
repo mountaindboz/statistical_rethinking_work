@@ -540,14 +540,17 @@ mu.PI <- apply( mu , 2 , PI , prob=0.89 )
 
 ## R code 4.57
 # plot raw data
-# fading out points to make line and interval more visible
-plot( height ~ weight , data=d2 , col=col.alpha(rangi2,0.5) )
+# use type="n" to hide raw data
+plot( height ~ weight , data=d2 , type = "n")
+
+# plot a shaded region for 89% PI
+shade( mu.PI , weight.seq, col = "lightgrey" )
+
+# Overplot data points
+points(d2$weight, d2$height, col=col.alpha(rangi2,0.5))
 
 # plot the MAP line, aka the mean mu for each weight
 lines( weight.seq , mu.mean )
-
-# plot a shaded region for 89% PI
-shade( mu.PI , weight.seq )
 
 ## R code 4.58
 post <- extract.samples(m4.3)
