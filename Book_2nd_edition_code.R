@@ -569,16 +569,20 @@ height.PI <- apply( sim.height , 2 , PI , prob=0.89 )
 
 ## R code 4.61
 # plot raw data
-plot( height ~ weight , d2 , col=col.alpha(rangi2,0.5) )
+# use type="n" to hide raw data
+plot( height ~ weight , data=d2 , type = "n")
+
+# draw PI region for simulated heights
+shade( height.PI , weight.seq, col = "lightgreen")
+
+# draw PI region for line
+shade( mu.PI , weight.seq, col = "lightgrey")
+
+# Overplot data points
+points(d2$weight, d2$height, col=col.alpha(rangi2,0.5))
 
 # draw MAP line
 lines( weight.seq , mu.mean )
-
-# draw HPDI region for line
-shade( mu.HPDI , weight.seq )
-
-# draw PI region for simulated heights
-shade( height.PI , weight.seq )
 
 ## R code 4.62
 sim.height <- sim( m4.3 , data=list(weight=weight.seq) , n=1e4 )
