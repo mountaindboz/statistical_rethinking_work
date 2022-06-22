@@ -662,7 +662,7 @@ d <- cherry_blossoms
 precis(d)
 
 ## R code 4.73
-d2 <- d[ complete.cases(d$doy) , ] # complete cases on doy
+d2 <- d[ complete.cases(d$temp) , ] # complete cases on temp
 num_knots <- 15
 knot_list <- quantile( d2$year , probs=seq(0,1,length.out=num_knots) )
 
@@ -679,12 +679,12 @@ for ( i in 1:ncol(B) ) lines( d2$year , B[,i] )
 ## R code 4.76
 m4.7 <- quap(
   alist(
-    D ~ dnorm( mu , sigma ) ,
+    T ~ dnorm( mu , sigma ) ,
     mu <- a + B %*% w ,
-    a ~ dnorm(100,10),
-    w ~ dnorm(0,10),
+    a ~ dnorm(6,10),
+    w ~ dnorm(0,1),
     sigma ~ dexp(1)
-  ), data=list( D=d2$doy , B=B ) ,
+  ), data=list( T=d2$temp , B=B ) ,
   start=list( w=rep( 0 , ncol(B) ) ) )
 
 ## R code 4.77
@@ -697,19 +697,19 @@ for ( i in 1:ncol(B) ) lines( d2$year , w[i]*B[,i] )
 ## R code 4.78
 mu <- link( m4.7 )
 mu_PI <- apply(mu,2,PI,0.97)
-plot( d2$year , d2$doy , col=col.alpha(rangi2,0.3) , pch=16 )
+plot( d2$year , d2$temp , col=col.alpha(rangi2,0.3) , pch=16 )
 shade( mu_PI , d2$year , col=col.alpha("black",0.5) )
 
 ## R code 4.79
 m4.7alt <- quap(
   alist(
-    D ~ dnorm( mu , sigma ) ,
-    mu <- a + sapply( 1:827 , function(i) sum( B[i,]*w ) ) ,
-    a ~ dnorm(100,1),
-    w ~ dnorm(0,10),
+    T ~ dnorm( mu , sigma ) ,
+    mu <- a + sapply( 1:1124 , function(i) sum( B[i,]*w ) ) ,
+    a ~ dnorm(6,10),
+    w ~ dnorm(0,1),
     sigma ~ dexp(1)
   ),
-  data=list( D=d2$doy , B=B ) ,
+  data=list( T=d2$temp , B=B ) ,
   start=list( w=rep( 0 , ncol(B) ) ) )
 
 ## R code 5.1
